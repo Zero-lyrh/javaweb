@@ -1,0 +1,24 @@
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com._520it.smis.dao.IStudentDAO;
+import com._520it.smis.dao.impl.StudentDAOImpl;
+//处理删除指定id学生的方法
+public class DeleteStudentServlet extends HttpServlet{
+	private IStudentDAO iStudentDAO = null;
+	
+	@Override
+	public void init() throws ServletException {
+		// TODO Auto-generated method stub
+		iStudentDAO = new StudentDAOImpl();
+	}protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Long id = Long.valueOf(req.getParameter("id"));
+		iStudentDAO.delete(id);
+		resp.sendRedirect("/web_02/Student-web");
+	}
+
+}
