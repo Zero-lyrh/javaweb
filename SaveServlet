@@ -1,0 +1,43 @@
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com._520it.smis.dao.IStudentDAO;
+import com._520it.smis.dao.impl.StudentDAOImpl;
+import com._520it.smis.domain.Student;
+
+public class SaveStudentServlet extends HttpServlet{
+
+	private IStudentDAO iStudentDAO = null;
+	
+	@Override
+	public void init() throws ServletException {
+		// TODO Auto-generated method stub
+		iStudentDAO = new StudentDAOImpl();
+	}
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setCharacterEncoding("UTF-8");//仅对post有效
+		String sid = req.getParameter("id");
+		String name = req.getParameter("name");
+		String age = req.getParameter("age");
+		Student student = new Student();
+		student.setAge(Integer.valueOf(age));
+		student.setName(name);
+		if (isNull(sid)) {
+			student.setId(Long.valueOf(sid));
+			iStudentDAO.update(Long.valueOf(sid), student);
+		} else {
+			
+			iStudentDAO.save(student);
+		}
+		
+		resp.sendRedirect("/web_02/Student-web");
+	}
+	//判断是否有id
+		private boolean isNull(String id) {
+			return id != null && !"".equals(id.trim());
+		}
+}
