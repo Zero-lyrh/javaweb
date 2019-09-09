@@ -1,0 +1,28 @@
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com._520it.smis.dao.IStudentDAO;
+import com._520it.smis.dao.impl.StudentDAOImpl;
+import com._520it.smis.domain.Student;
+
+
+public class ListStudentServlet extends HttpServlet{
+	private IStudentDAO iStudentDAO = null;
+	
+	@Override
+	public void init() throws ServletException {
+		// TODO Auto-generated method stub
+		iStudentDAO = new StudentDAOImpl();
+	}
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		java.util.List<Student> list = iStudentDAO.listAll();
+		req.setAttribute("students", list);
+		//跳转//共享请求中的数据用请求转发
+		req.getRequestDispatcher("/WEB-INF/student_list.jsp").forward(req, resp);
+	}
+}
