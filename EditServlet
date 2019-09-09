@@ -1,0 +1,34 @@
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com._520it.smis.dao.IStudentDAO;
+import com._520it.smis.dao.impl.StudentDAOImpl;
+import com._520it.smis.domain.Student;
+//进入编辑界面
+public class EditStudentServlet extends HttpServlet{
+private IStudentDAO iStudentDAO = null;
+	
+	@Override
+	public void init() throws ServletException {
+		// TODO Auto-generated method stub
+		iStudentDAO = new StudentDAOImpl();
+	}
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		String sid = req.getParameter("id");
+		if (isNull(sid)) {
+			Student student = iStudentDAO.get(Long.valueOf(sid));
+			req.setAttribute("student", student);
+		}
+		
+		req.getRequestDispatcher("/WEB-INF/edit.jsp").forward(req, resp);
+	}
+	//判断是否有id
+	private boolean isNull(String id) {
+		return id != null && !"".equals(id.trim());
+	}
+}
